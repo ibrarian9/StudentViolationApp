@@ -84,6 +84,7 @@
                             <th>K1</th>
                             <th>K2</th>
                             <th>K3</th>
+                            <th>Total Score</th>
                         </tr>
                         </thead>
                         <tbody class="text-center">
@@ -94,6 +95,7 @@
                                 <td>{{ $alt["total_k1"] }}</td>
                                 <td>{{ $alt["total_k2"] }}</td>
                                 <td>{{ $alt["total_k3"] }}</td>
+                                <td>{{ $alt["total_score"] }}</td>
                             </tr>
                         @endforeach
                         </tbody>

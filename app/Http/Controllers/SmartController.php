@@ -7,8 +7,7 @@ use App\Models\Pelanggaran;
 
 class SmartController extends Controller
 {
-    public function index()
-    {
+    public function index(){
         // Get total bobot
         $totalBobot = Kriteria::sum('bobot_kriteria');
 
@@ -40,7 +39,7 @@ class SmartController extends Controller
                     'total_k1' => 0,
                     'total_k2' => 0,
                     'total_k3' => 0,
-                    'final_score' => 0,
+                    'total_score' => 0,
                 ];
             }
 
@@ -52,6 +51,12 @@ class SmartController extends Controller
             } elseif ($id_kriteria == 6) {
                 $nilaiSiswa[$id_siswa]['total_k3'] += $bobot_subkriteria;
             }
+
+            // Calculate total score by summing all weighted criteria scores
+            $nilaiSiswa[$id_siswa]['total_score'] =
+                ($nilaiSiswa[$id_siswa]['total_k1'] * 0.5) +
+                ($nilaiSiswa[$id_siswa]['total_k2'] * 0.2) +
+                ($nilaiSiswa[$id_siswa]['total_k3'] * 0.3);
         }
 
         return view('proses-smart.index', compact('kriteria', 'nilaiSiswa'));
