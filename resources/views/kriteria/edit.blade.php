@@ -14,13 +14,13 @@
 
         <div class="card shadow mb-4">
             <div class="card-body">
-                <form action="{{ route('kriteria.update', $kriteria->id_kriteria) }}" method="POST">
+                <form action="" method="POST">
                     @csrf
                     @method('PUT')
 
                     <div class="input-group mb-3">
                         <input type="text"
-                               value="{{ old('nama_kriteria', $kriteria->nama_kriteria) }}"
+                               value=""
                                name="nama_kriteria"
                                placeholder="Masukkan Nama Kriteria"
                                class="form-control @error('nama_kriteria') is-invalid @enderror"
@@ -34,7 +34,7 @@
 
                     <div class="input-group mb-3">
                         <input type="text"
-                               value="{{ old('bobot_kriteria', $kriteria->bobot_kriteria) }}"
+                               value=""
                                name="bobot_kriteria"
                                placeholder="Masukkan Bobot Kriteria"
                                class="form-control @error('bobot_kriteria') is-invalid @enderror"
@@ -50,7 +50,7 @@
                         <i class='bx bx-save'></i> Update Data
                     </button>
 
-                    <a href="{{ route('kriteria.index') }}" class="btn btn-secondary">
+                    <a href="" class="btn btn-secondary">
                         <i class='bx bxs-share'></i>
                         <span class="text">Back</span>
                     </a>

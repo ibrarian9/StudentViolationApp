@@ -22,4 +22,12 @@ Route::middleware('auth')->group(function () {
     Route::resource('pelanggaran', PelanggaranController::class);
     Route::get('/proses-smart', [SmartController::class, 'index'])->name('proses-smart');
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+    //Edit Siswa
+    Route::get('/siswa/{id}/edit', [SiswaController::class, 'edit'])->name('siswa.edit');
+    Route::put('/siswa/{id}', [SiswaController::class, 'update'])->name('siswa.update');
+    //Show Siswa
+    Route::get('/siswa/{siswa}', [SiswaController::class, 'show'])->name('siswa.show');
+    //Edit Subkriteria
+    Route::get('/subkriteria/{id}/edit', [SubkriteriaController::class, 'edit'])->name('subkriteria.edit');
+    Route::put('/subkriteria/{id}', [SubkriteriaController::class, 'update'])->name('subkriteria.update');
 });
