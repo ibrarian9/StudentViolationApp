@@ -64,7 +64,50 @@
                     </div>
                 </div>
             </div>
+            <h1 class="h3 mb-0 text-gray-800">Pelanggaran Terbanyak</h1>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>NO</th>
+                            <th>NAMA PELANGGARAN</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($topPelanggaran as $pelanggaran)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $pelanggaran->nama_subkriteria }}</td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>NO</th>
+                            <th>NAMA SISWA</th>
+                            <th>SKOR</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($listSiswa as $siswa)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $siswa["nama_siswa"] }}</td>
+                                <td>{{ $siswa["total_score"] }}</td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 @endsection

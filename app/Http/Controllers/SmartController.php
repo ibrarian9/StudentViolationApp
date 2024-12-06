@@ -20,7 +20,7 @@ class SmartController extends Controller
         // Step 1: Fetch all violations with subcriteria and criteria relationships
         $pelanggaran = Pelanggaran::with('subkriteria.kriteria', 'siswa')->get();
 
-        // Step 3: Initialize student scores grouped by criteria
+        // Step 2: Initialize student scores grouped by criteria
         $nilaiSiswa = [];
 
         foreach ($pelanggaran as $violation) {
