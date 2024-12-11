@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h1>Detail Siswa</h1>
+    <h3>Detail Siswa</h3>
     <table class="table table-bordered">
         <tr>
             <th>NISN</th>
@@ -45,6 +45,29 @@
             <td>{{ $siswa->nohp_ortu }}</td>
         </tr>
     </table>
+    <div class="card-body">
+        <h3>Riwayat Pelanggaran Siswa</h3>
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                <tr>
+                    <th>NO</th>
+                    <th>PELANGGARAN</th>
+                    <th>TANGGAL</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($dataPelanggaran as $data)
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $data->subkriteria->nama_subkriteria }}</td>
+                        <td>{{ $data->created_at->toDateString() }}</td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
     <a href="{{ route('siswa.index') }}" class="btn btn-secondary">Kembali</a>
 </div>
 @endsection

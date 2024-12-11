@@ -1,6 +1,6 @@
 <ul class="navbar-nav bg-gradient-info sidebar sidebar-dark accordion" id="accordionSidebar">
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" >
+    <a class="sidebar-brand d-flex align-items-center justify-content-center">
         <div class="sidebar-brand-icon">
             <i class="bx bxs-school"></i>
         </div>
@@ -42,6 +42,13 @@
         <a class="nav-link" href="{{ route('pelanggaran.index') }}">
             <i class="bx bx-spreadsheet"></i>
             <span>Pelanggaran</span>
+        </a>
+    </li>
+
+    <li class="nav-item {{ request()->routeIs('sanksi.*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('sanksi.index') }}">
+            <i class="bx bx-spreadsheet"></i>
+            <span>Jenis Sanksi</span>
         </a>
     </li>
 

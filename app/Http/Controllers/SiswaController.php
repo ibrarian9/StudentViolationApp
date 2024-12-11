@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pelanggaran;
 use App\Models\Siswa;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -12,11 +13,6 @@ class SiswaController extends Controller
     {
         $siswa = Siswa::with('pelanggaran.subkriteria')->get();
         return view('siswa.index', compact('siswa'));
-    }
-
-    public function create()
-    {
-        return view('siswa.create');
     }
 
     public function store(Request $request): RedirectResponse
@@ -73,6 +69,7 @@ class SiswaController extends Controller
     }
 
     public function show(Siswa $siswa){
-        return view('siswa.show', compact('siswa'));
+        $dataPelanggaran = Pelanggaran::with(['siswa', 'subkriteria'])->where('id_siswa', '=', $siswa->id_siswa)->get();
+        return view('siswa.show', compact('siswa', 'dataPelanggaran'));
     }
 }

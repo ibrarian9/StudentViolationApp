@@ -9,7 +9,7 @@ class Pelanggaran extends Model
 {
     protected $table = 'tb_pelanggaran';
     protected $primaryKey = 'id_pelanggaran';
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         'id_siswa',

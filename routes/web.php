@@ -4,6 +4,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KriteriaController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PelanggaranController;
+use App\Http\Controllers\SanksiController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\SmartController;
 use App\Http\Controllers\SubkriteriaController;
@@ -16,15 +17,13 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard',[DashboardController::class, 'index'])->name('dashboard');
+    Route::resource('sanksi', SanksiController::class);
     Route::resource('siswa', SiswaController::class);
     Route::resource('kriteria', KriteriaController::class);
     Route::resource('subkriteria', SubkriteriaController::class);
     Route::resource('pelanggaran', PelanggaranController::class);
     Route::get('/proses-smart', [SmartController::class, 'index'])->name('proses-smart');
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-    //Edit Siswa
-    Route::get('/siswa/{id}/edit', [SiswaController::class, 'edit'])->name('siswa.edit');
-    Route::put('/siswa/{id}', [SiswaController::class, 'update'])->name('siswa.update');
     //Show Siswa
     Route::get('/siswa/{siswa}', [SiswaController::class, 'show'])->name('siswa.show');
     //Edit Subkriteria
