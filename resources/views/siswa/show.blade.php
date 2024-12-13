@@ -70,11 +70,11 @@
                 <tfoot>
                     <tr>
                         <td colspan="2"><strong>Total Score</strong></td>
-                        <td colspan="2">{{ $totalScore }}</td>
+                        <td colspan="2">{{ $totalScore ?? 0 }}</td>
                     </tr>
                     <tr>
                         <td colspan="2"><strong>Sanksi</strong></td>
-                        <td colspan="2">{{ $sanksi }}</td>
+                        <td colspan="2">{{ $sanksi ?? "-" }}</td>
                     </tr>
                 </tfoot>
             </table>
@@ -83,3 +83,11 @@
     <a href="{{ route('siswa.index') }}" class="btn btn-secondary">Kembali</a>
 </div>
 @endsection
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            $('#dataTable').DataTable();
+        });
+    </script>
+@endpush

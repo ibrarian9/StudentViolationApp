@@ -92,7 +92,7 @@
                             </div>
 
                             <div class="input-group mb-3">
-                                <input type="text" placeholder="Masukkan Bobot Sub Kriteria"
+                                <input type="number" placeholder="Masukkan Bobot Sub Kriteria"
                                        name="bobot_subkriteria" class="form-control" required>
                             </div>
 

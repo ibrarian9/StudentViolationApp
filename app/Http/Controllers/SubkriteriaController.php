@@ -21,7 +21,7 @@ class SubkriteriaController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validatedData = $request->validate([
-            'id_kriteria' => 'required|exists:kriterias,id_kriteria',
+            'id_kriteria' => 'required|exists:tb_kriteria,id_kriteria',
             'nama_subkriteria' => 'required|string',
             'bobot_subkriteria' => 'required|numeric'
         ]);
@@ -42,7 +42,7 @@ class SubkriteriaController extends Controller
     public function update(Request $request, $id): RedirectResponse
     {
         $validatedData = $request->validate([
-            'id_kriteria' => 'required|exists:kriterias,id_kriteria',
+            'id_kriteria' => 'required|exists:tb_kriteria,id_kriteria',
             'nama_subkriteria' => 'required|string',
             'bobot_subkriteria' => 'required|numeric'
         ]);

@@ -64,8 +64,8 @@
                     </div>
                 </div>
             </div>
-            <h1 class="h3 mb-0 text-gray-800">Pelanggaran Terbanyak</h1>
             <div class="card-body">
+                <h1 class="h3 mb-0 text-gray-800">Pelanggaran Terbanyak</h1>
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
@@ -87,6 +87,7 @@
             </div>
 
             <div class="card-body">
+                <h1 class="h3 mb-0 text-gray-800">Siswa dengan Skor Tertinggi</h1>
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>

@@ -4,6 +4,9 @@
 
 @section('content')
     <div class="container-fluid">
+        <!-- Display Error Messages -->
+        @include('layouts.partials.messages')
+
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Data Pelanggaran</h1>

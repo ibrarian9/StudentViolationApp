@@ -31,12 +31,12 @@
                 </div>
                 <div class="form-group">
                     <label for="nama_subkriteria">Sub Kriteria</label>
-                    <textarea name="nama_subkriteria" id="nama_subkriteria" 
+                    <textarea name="nama_subkriteria" id="nama_subkriteria"
               class="form-control" rows="4" required>{{ $subkriteria->nama_subkriteria }}</textarea>
                 </div>
                 <div class="form-group">
                     <label for="bobot_subkriteria">Point</label>
-                    <input type="text" name="bobot_subkriteria" id="bobot_subkriteria" 
+                    <input type="number" name="bobot_subkriteria" id="bobot_subkriteria"
                            class="form-control" value="{{ $subkriteria->bobot_subkriteria }}" required>
                 </div>
                 <button type="submit" class="btn btn-info">

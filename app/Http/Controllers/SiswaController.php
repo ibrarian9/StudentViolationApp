@@ -65,6 +65,8 @@ class SiswaController extends Controller
 
     public function destroy(Siswa $siswa)
     {
+        $pelanggaran = Pelanggaran::where('id_siswa', $siswa->id_siswa);
+        $pelanggaran->delete();
         $siswa->delete();
         return redirect()->route('siswa.index')->with('success', 'Data siswa berhasil dihapus');
     }
@@ -117,7 +119,6 @@ class SiswaController extends Controller
                 ($nilaiSiswa[$id_siswa]['total_k3'] * 0.3);
         }
 
-// Determine the Sanksi for each student
         foreach ($nilaiSiswa as &$item) {
             $matchingSanksi = $sanksi->sortByDesc('jumlah_poin')
                 ->firstWhere('jumlah_poin', '<=', $item['total_score']);
