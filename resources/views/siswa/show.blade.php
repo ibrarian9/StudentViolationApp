@@ -26,7 +26,7 @@
         </tr>
         <tr>
             <th>Tanggal Lahir</th>
-            <td>{{ $siswa->tgl_lahir }}</td>
+            <td>{{ $siswa->tgl_lahir->toDateString() }}</td>
         </tr>
         <tr>
             <th>Nama Ayah</th>
@@ -53,6 +53,7 @@
                 <tr>
                     <th>NO</th>
                     <th>PELANGGARAN</th>
+                    <th>POIN</th>
                     <th>TANGGAL</th>
                 </tr>
                 </thead>
@@ -61,10 +62,21 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $data->subkriteria->nama_subkriteria }}</td>
+                        <td>{{ $data->subkriteria->bobot_subkriteria }}</td>
                         <td>{{ $data->created_at->toDateString() }}</td>
                     </tr>
                 @endforeach
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2"><strong>Total Score</strong></td>
+                        <td colspan="2">{{ $totalScore }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><strong>Sanksi</strong></td>
+                        <td colspan="2">{{ $sanksi }}</td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>

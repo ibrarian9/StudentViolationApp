@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pelanggaran;
+use App\Models\Sanksi;
 use App\Models\Siswa;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -69,7 +70,75 @@ class SiswaController extends Controller
     }
 
     public function show(Siswa $siswa){
-        $dataPelanggaran = Pelanggaran::with(['siswa', 'subkriteria'])->where('id_siswa', '=', $siswa->id_siswa)->get();
-        return view('siswa.show', compact('siswa', 'dataPelanggaran'));
+        $dataPelanggaran = Pelanggaran::with(['siswa', 'subkriteria'])->where('id_siswa', $siswa->id_siswa)->get();
+
+        $pelanggaran = Pelanggaran::with('subkriteria.kriteria', 'siswa')->where('id_siswa', $siswa->id_siswa)->get();
+
+        $sanksi = Sanksi::all();
+
+// Step 2: Initialize student scores grouped by criteria
+        $nilaiSiswa = [];
+
+        foreach ($pelanggaran as $violation) {
+            $siswa = $violation->siswa;
+            $id_siswa = $siswa->id_siswa;
+            $nama_siswa = $siswa->nama_siswa;
+
+            $subkriteria = $violation->subkriteria;
+            $id_kriteria = $subkriteria->id_kriteria;
+            $bobot_subkriteria = $subkriteria->bobot_subkriteria;
+
+            // Initialize student data if not already set
+            if (!isset($nilaiSiswa[$id_siswa])) {
+                $nilaiSiswa[$id_siswa] = [
+                    'id_siswa' => $id_siswa,
+                    'nama_siswa' => $nama_siswa,
+                    'total_k1' => 0,
+                    'total_k2' => 0,
+                    'total_k3' => 0,
+                    'total_score' => 0,
+                    'sanksi' => '-'
+                ];
+            }
+
+            // Accumulate subcriteria scores based on criteria
+            if ($id_kriteria == 3) {
+                $nilaiSiswa[$id_siswa]['total_k1'] += $bobot_subkriteria;
+            } elseif ($id_kriteria == 4) {
+                $nilaiSiswa[$id_siswa]['total_k2'] += $bobot_subkriteria;
+            } elseif ($id_kriteria == 6) {
+                $nilaiSiswa[$id_siswa]['total_k3'] += $bobot_subkriteria;
+            }
+
+            // Calculate total score by summing all weighted criteria scores
+            $nilaiSiswa[$id_siswa]['total_score'] =
+                ($nilaiSiswa[$id_siswa]['total_k1'] * 0.5) +
+                ($nilaiSiswa[$id_siswa]['total_k2'] * 0.2) +
+                ($nilaiSiswa[$id_siswa]['total_k3'] * 0.3);
+        }
+
+// Determine the Sanksi for each student
+        foreach ($nilaiSiswa as &$item) {
+            $matchingSanksi = $sanksi->sortByDesc('jumlah_poin')
+                ->firstWhere('jumlah_poin', '<=', $item['total_score']);
+
+            $item['sanksi'] = $matchingSanksi ? $matchingSanksi->jenis_sanksi : '-';
+        }
+
+        // Get Total Score and Sanksi for a specific id_siswa
+        $id_siswa_to_check = $siswa->id_siswa; // The specific id_siswa being checked
+        $totalScoreAndSanksi = $nilaiSiswa[$id_siswa_to_check] ?? null;
+
+        if ($totalScoreAndSanksi) {
+            $totalScore = $totalScoreAndSanksi['total_score'];
+            $sanksi = $totalScoreAndSanksi['sanksi'];
+
+            // Pass the total score and sanksi to the view
+            return view('siswa.show', compact('siswa', 'dataPelanggaran', 'totalScore', 'sanksi'));
+        } else {
+            // Handle case where no data is found for the student
+            return view('siswa.show', compact('siswa', 'dataPelanggaran'))
+                ->with('message', 'No data found for this siswa');
+        }
     }
 }

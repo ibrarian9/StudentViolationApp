@@ -35,9 +35,9 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($siswa as $index => $siswas)
+                        @foreach($siswa as $siswas)
                             <tr>
-                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $loop->iteration }}</td>
                                 <td>{{ $siswas->nisn }}</td>
                                 <td>{{ $siswas->kelas }}</td>
                                 <td>{{ $siswas->nama_siswa }}</td>

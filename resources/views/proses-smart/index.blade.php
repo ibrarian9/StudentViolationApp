@@ -85,17 +85,19 @@
                             <th>K2</th>
                             <th>K3</th>
                             <th>Total Score</th>
+                            <th>Sanksi</th>
                         </tr>
                         </thead>
-                        <tbody class="text-center">
-                        @foreach($nilaiSiswa as $index => $alt)
+                        <tbody>
+                        @foreach($nilaiSiswa as $alt)
                             <tr>
-                                <td>{{ $loop->index + 1 }}</td>
+                                <td>{{ $loop->iteration }}</td>
                                 <td>{{ $alt["nama_siswa"] }}</td>
                                 <td>{{ $alt["total_k1"] }}</td>
                                 <td>{{ $alt["total_k2"] }}</td>
                                 <td>{{ $alt["total_k3"] }}</td>
                                 <td>{{ $alt["total_score"] }}</td>
+                                <td>{{ $alt["sanksi"] }}</td>
                             </tr>
                         @endforeach
                         </tbody>

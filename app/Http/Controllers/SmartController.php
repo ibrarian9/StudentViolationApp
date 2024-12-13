@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Kriteria;
 use App\Models\Pelanggaran;
+use App\Models\Sanksi;
 
 class SmartController extends Controller
 {
@@ -19,6 +20,8 @@ class SmartController extends Controller
 
         // Step 1: Fetch all violations with subcriteria and criteria relationships
         $pelanggaran = Pelanggaran::with('subkriteria.kriteria', 'siswa')->get();
+
+        $sanksi = Sanksi::all();
 
         // Step 2: Initialize student scores grouped by criteria
         $nilaiSiswa = [];
@@ -40,6 +43,7 @@ class SmartController extends Controller
                     'total_k2' => 0,
                     'total_k3' => 0,
                     'total_score' => 0,
+                    'sanksi' => '-'
                 ];
             }
 
@@ -57,6 +61,13 @@ class SmartController extends Controller
                 ($nilaiSiswa[$id_siswa]['total_k1'] * 0.5) +
                 ($nilaiSiswa[$id_siswa]['total_k2'] * 0.2) +
                 ($nilaiSiswa[$id_siswa]['total_k3'] * 0.3);
+        }
+
+        foreach ($nilaiSiswa as &$item){
+            $matchingSanksi = $sanksi->sortByDesc('jumlah_poin')
+                ->firstWhere('jumlah_poin', '<=', $item['total_score']);
+
+            $item['sanksi'] = $matchingSanksi ? $matchingSanksi->jenis_sanksi : '-';
         }
 
         return view('proses-smart.index', compact('kriteria', 'nilaiSiswa'));
