@@ -81,11 +81,16 @@
         </div>
     </div>
     <a href="{{ route('siswa.index') }}" class="btn btn-secondary">Kembali</a>
+    <a href="{{ route('download.pdf', $siswa->id_siswa) }}" class="btn btn-success" onclick="return confirmDownload()">Download PDF</a>
 </div>
 @endsection
 
 @push('scripts')
     <script>
+        function confirmDownload() {
+            return confirm("Are you sure you want to download the PDF?");
+        }
+
         $(document).ready(function() {
             $('#dataTable').DataTable();
         });

@@ -53,7 +53,7 @@
             <div class="form-group">
                 <label for="tgl_lahir">Tanggal Lahir</label>
                 <input type="date" name="tgl_lahir" id="editTanggalLahir"
-                       value="{{ old('tgl_lahir', Carbon\Carbon::parse($siswa->tgl_lahir)->format('Y-m-d')) }}"
+                       value="{{ old('tgl_lahir', Carbon::parse($siswa->tgl_lahir)->format('Y-m-d')) }}"
                        class="form-control" required>
             </div>
 

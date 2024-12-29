@@ -5,12 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Pelanggaran;
 use App\Models\Sanksi;
 use App\Models\Siswa;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class SiswaController extends Controller
 {
-    public function index()
+    public function index(): Application|Factory|View
     {
         $siswa = Siswa::with('pelanggaran.subkriteria')->get();
         return view('siswa.index', compact('siswa'));
@@ -39,7 +44,7 @@ class SiswaController extends Controller
         }
     }
 
-    public function edit(Siswa $siswa)
+    public function edit(Siswa $siswa): Application|Factory|View
     {
         return view('siswa.edit', compact('siswa'));
     }
@@ -63,7 +68,7 @@ class SiswaController extends Controller
         return redirect()->route('siswa.index')->with('success', 'Data siswa berhasil diperbarui');
     }
 
-    public function destroy(Siswa $siswa)
+    public function destroy(Siswa $siswa): RedirectResponse
     {
         $pelanggaran = Pelanggaran::where('id_siswa', $siswa->id_siswa);
         $pelanggaran->delete();
@@ -78,7 +83,7 @@ class SiswaController extends Controller
 
         $sanksi = Sanksi::all();
 
-// Step 2: Initialize student scores grouped by criteria
+        // Step 2: Initialize student scores grouped by criteria
         $nilaiSiswa = [];
 
         foreach ($pelanggaran as $violation) {
@@ -141,5 +146,71 @@ class SiswaController extends Controller
             return view('siswa.show', compact('siswa', 'dataPelanggaran'))
                 ->with('message', 'No data found for this siswa');
         }
+    }
+
+    public function downloadPdf(Siswa $siswa): Response
+    {
+        // Fetch the necessary data for the PDF
+        $dataPelanggaran = Pelanggaran::with(['siswa', 'subkriteria'])
+            ->where('id_siswa', $siswa->id_siswa)
+            ->get();
+
+        $pelanggaran = Pelanggaran::with('subkriteria.kriteria', 'siswa')
+            ->where('id_siswa', $siswa->id_siswa)
+                ->get();
+
+        $sanksi = Sanksi::all();
+        $nilaiSiswa = [];
+
+        foreach ($pelanggaran as $violation) {
+            $id_siswa = $violation->siswa->id_siswa;
+            $nama_siswa = $violation->siswa->nama_siswa;
+
+            $subkriteria = $violation->subkriteria;
+            $id_kriteria = $subkriteria->id_kriteria;
+            $bobot_subkriteria = $subkriteria->bobot_subkriteria;
+
+            if (!isset($nilaiSiswa[$id_siswa])) {
+                $nilaiSiswa[$id_siswa] = [
+                    'id_siswa' => $id_siswa,
+                    'nama_siswa' => $nama_siswa,
+                    'total_k1' => 0,
+                    'total_k2' => 0,
+                    'total_k3' => 0,
+                    'total_score' => 0,
+                    'sanksi' => '-'
+                ];
+            }
+
+            if ($id_kriteria == 3) {
+                $nilaiSiswa[$id_siswa]['total_k1'] += $bobot_subkriteria;
+            } elseif ($id_kriteria == 4) {
+                $nilaiSiswa[$id_siswa]['total_k2'] += $bobot_subkriteria;
+            } elseif ($id_kriteria == 6) {
+                $nilaiSiswa[$id_siswa]['total_k3'] += $bobot_subkriteria;
+            }
+
+            $nilaiSiswa[$id_siswa]['total_score'] =
+                ($nilaiSiswa[$id_siswa]['total_k1'] * 0.5) +
+                ($nilaiSiswa[$id_siswa]['total_k2'] * 0.2) +
+                ($nilaiSiswa[$id_siswa]['total_k3'] * 0.3);
+        }
+
+        foreach ($nilaiSiswa as &$item) {
+            $matchingSanksi = $sanksi->sortByDesc('jumlah_poin')
+                ->firstWhere('jumlah_poin', '<=', $item['total_score']);
+            $item['sanksi'] = $matchingSanksi ? $matchingSanksi->jenis_sanksi : '-';
+        }
+
+        $totalScoreAndSanksi = $nilaiSiswa[$siswa->id_siswa] ?? null;
+
+        $totalScore = $totalScoreAndSanksi['total_score'] ?? 0;
+        $sanksi = $totalScoreAndSanksi['sanksi'] ?? '-';
+
+        // Load the PDF view with data
+        $pdf = Pdf::loadView('siswa.pdf', compact('siswa', 'dataPelanggaran', 'totalScore', 'sanksi'));
+
+        // Return the PDF for download
+        return $pdf->download('riwayat_siswa.pdf');
     }
 }
